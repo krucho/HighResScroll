@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scroller Pedal - Configuración</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #0a0e27;
+            min-height: 100vh;
+            padding: 20px;
+            color: #e0e0e0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #1a1f3a;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            overflow: hidden;
+            border: 1px solid #2d3555;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+
+        .content {
+            padding: 30px;
+            background: #1a1f3a;
+        }
+
+        .section {
+            margin-bottom: 40px;
+            padding: 25px;
+            background: #252b47;
+            border-radius: 12px;
+            border: 2px solid #2d3555;
+        }
+
+        .section h2 {
+            color: #8b9aff;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #dc3545;
+            animation: pulse 2s infinite;
+        }
+
+        .status-indicator.connected {
+            background: #28a745;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #7a8ef5 0%, #8a5fb8 100%);
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #34ce57;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #e84d5c;
+        }
+
+        .btn-secondary {
+            background: #4a5568;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6578;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #b8c5e0;
+            font-size: 0.9em;
+        }
+
+        .form-group input,
+        .form-group select {
+            padding: 12px;
+            border: 2px solid #3d4563;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s ease;
+            background: #1a1f3a;
+            color: #e0e0e0;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+            background: #1f2540;
+        }
+
+        .form-group small {
+            margin-top: 5px;
+            color: #8b9aff;
+            font-size: 0.85em;
+        }
+
+        .test-area {
+            background: #1a1f3a;
+            border: 2px solid #3d4563;
+            border-radius: 8px;
+            padding: 20px;
+            max-height: 500px;
+            overflow-y: auto;
+            font-size: 1.1em;
+            line-height: 1.8;
+            color: #c8d0e8;
+            margin-top: 15px;
+        }
+
+        .test-area h3, .test-area h4 {
+            color: #8b9aff;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        .test-area::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        .test-area::-webkit-scrollbar-track {
+            background: #252b47;
+            border-radius: 6px;
+        }
+
+        .test-area::-webkit-scrollbar-thumb {
+            background: #667eea;
+            border-radius: 6px;
+        }
+
+        .test-area::-webkit-scrollbar-thumb:hover {
+            background: #764ba2;
+        }
+
+        .message {
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 15px;
+            display: none;
+        }
+
+        .message.show {
+            display: block;
+        }
+
+        .message.success {
+            background: #1e3a2e;
+            color: #4ade80;
+            border: 1px solid #22c55e;
+        }
+
+        .message.error {
+            background: #3a1e1e;
+            color: #f87171;
+            border: 1px solid #ef4444;
+        }
+
+        .message.info {
+            background: #1e2a3a;
+            color: #60a5fa;
+            border: 1px solid #3b82f6;
+        }
+
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🖱️ Scroller Pedal</h1>
+            <p>Configuración y Prueba de Scroll de Alta Resolución</p>
+        </div>
+
+        <div class="content">
+            <!-- Sección de Conexión -->
+            <div class="section">
+                <h2>
+                    <span class="status-indicator" id="statusIndicator"></span>
+                    Conexión Serial
+                </h2>
+                <div class="button-group">
+                    <button id="connectBtn" class="btn-primary">Conectar Dispositivo</button>
+                    <button id="disconnectBtn" class="btn-danger" disabled>Desconectar</button>
+                </div>
+                <div id="connectionMessage" class="message"></div>
+            </div>
+
+            <!-- Sección de Configuración -->
+            <div class="section">
+                <h2>⚙️ Configuración de Parámetros</h2>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="tiempoAcelerar">Tiempo para Acelerar (ms)</label>
+                        <input type="number" id="tiempoAcelerar" min="100" max="10000" value="800">
+                        <small>Rango: 100-10000 ms</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="scrollMin">Scroll Mínimo</label>
+                        <input type="number" id="scrollMin" min="-127" max="127" value="-1">
+                        <small>Velocidad inicial (suave)</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="scrollMax">Scroll Máximo</label>
+                        <input type="number" id="scrollMax" min="-127" max="127" value="-12">
+                        <small>Velocidad máxima (rápida)</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="pasoAceleracion">Paso de Aceleración (ms)</label>
+                        <input type="number" id="pasoAceleracion" min="10" max="1000" value="150">
+                        <small>Rango: 10-1000 ms</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="direccionScroll">Dirección del Scroll</label>
+                        <select id="direccionScroll">
+                            <option value="-1">Abajo (negativo)</option>
+                            <option value="1">Arriba (positivo)</option>
+                        </select>
+                        <small>Dirección del movimiento</small>
+                    </div>
+                </div>
+
+                <div class="button-group">
+                    <button id="loadBtn" class="btn-secondary" disabled>Cargar desde Dispositivo</button>
+                    <button id="applyBtn" class="btn-primary" disabled>Aplicar Cambios</button>
+                    <button id="saveBtn" class="btn-success" disabled>Guardar en EEPROM</button>
+                    <button id="resetBtn" class="btn-danger" disabled>Restaurar Valores por Defecto</button>
+                </div>
+                <div id="configMessage" class="message"></div>
+            </div>
+
+            <!-- Sección de Prueba -->
+            <div class="section">
+                <h2>🧪 Área de Prueba</h2>
+                <p style="margin-bottom: 15px; color: #8b9aff;">
+                    Presiona el botón del pedal para probar el scroll. El texto de abajo es muy largo y te permitirá evaluar la suavidad y precisión del scroll en ambas direcciones. El contenido se posiciona automáticamente en el medio para que siempre puedas hacer scroll hacia arriba y hacia abajo.
+                </p>
+                <div class="test-area" id="testArea">
+                    <!-- El contenido se generará dinámicamente con JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let port = null;
+        let reader = null;
+        let isConnected = false;
+
+        // Elementos del DOM
+        const connectBtn = document.getElementById('connectBtn');
+        const disconnectBtn = document.getElementById('disconnectBtn');
+        const statusIndicator = document.getElementById('statusIndicator');
+        const connectionMessage = document.getElementById('connectionMessage');
+        const configMessage = document.getElementById('configMessage');
+        const loadBtn = document.getElementById('loadBtn');
+        const applyBtn = document.getElementById('applyBtn');
+        const saveBtn = document.getElementById('saveBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const testArea = document.getElementById('testArea');
+
+        // Generar contenido largo para el área de prueba
+        function generateTestContent() {
+            const baseContent = `
+                <h3>Texto de Prueba para Scroll de Alta Resolución</h3>
+                <p>Este es un texto extenso diseñado para probar el funcionamiento del scroll de alta resolución. Puedes usar el pedal para hacer scroll suave y evaluar cómo se comporta el movimiento en ambas direcciones.</p>
+                
+                <p>El scroll de alta resolución permite movimientos pixel a pixel, a diferencia del scroll tradicional que se mueve en "líneas" de texto. Esto proporciona una experiencia mucho más fluida y precisa, especialmente útil para tareas de diseño, edición de código o navegación precisa en documentos largos.</p>
+                
+                <h4>Características del Scroll:</h4>
+                <ul>
+                    <li><strong>Fase de Precisión:</strong> Los primeros milisegundos el scroll es ultra-lento, ideal para diseño o selección precisa de texto. Esta fase te permite hacer ajustes muy finos sin sobrepasar tu objetivo.</li>
+                    <li><strong>Fase de Vuelo:</strong> Después del umbral de tiempo configurado, la velocidad aumenta progresivamente. Esto te permite navegar rápidamente por documentos largos cuando lo necesitas.</li>
+                    <li><strong>Aceleración Dinámica:</strong> La velocidad se ajusta automáticamente según el tiempo que mantengas presionado el pedal. Mientras más tiempo mantengas presionado, más rápido será el scroll.</li>
+                    <li><strong>Configuración Persistente:</strong> Todos los parámetros se guardan en EEPROM, por lo que tus ajustes personalizados se mantienen incluso después de reiniciar el dispositivo.</li>
+                </ul>
+                
+                <h4>Configuración de Parámetros:</h4>
+                <p>Puedes ajustar varios parámetros para personalizar el comportamiento del scroll según tus necesidades específicas:</p>
+                <ul>
+                    <li><strong>Tiempo para Acelerar:</strong> Controla cuánto tiempo debe pasar antes de que comience la aceleración. Valores más altos significan más tiempo en la fase de precisión.</li>
+                    <li><strong>Scroll Mínimo:</strong> La velocidad inicial cuando presionas el pedal. Valores más cercanos a cero proporcionan un scroll más suave y controlado.</li>
+                    <li><strong>Scroll Máximo:</strong> La velocidad máxima que puede alcanzar el scroll. Valores más negativos (o positivos según la dirección) permiten un desplazamiento más rápido.</li>
+                    <li><strong>Paso de Aceleración:</strong> El intervalo entre cada incremento de velocidad. Valores más pequeños resultan en una aceleración más gradual.</li>
+                    <li><strong>Dirección:</strong> Puedes invertir la dirección del scroll según tus preferencias. Esto es útil si encuentras que la dirección predeterminada no coincide con tu intuición.</li>
+                </ul>
+                
+                <h4>Uso del Pedal:</h4>
+                <p>Para usar el pedal, simplemente presiona el botón físico conectado al dispositivo. El scroll comenzará suavemente y acelerará si mantienes presionado el botón durante más tiempo. Esto te da control total sobre la velocidad del scroll: toques cortos para movimientos precisos, y presión prolongada para navegación rápida.</p>
+                
+                <h4>Ventajas del Scroll de Alta Resolución:</h4>
+                <p>El scroll de alta resolución ofrece varias ventajas sobre el scroll tradicional:</p>
+                <ul>
+                    <li><strong>Precisión:</strong> Permite movimientos muy pequeños, ideales para tareas que requieren precisión milimétrica.</li>
+                    <li><strong>Suavidad:</strong> El movimiento es continuo y fluido, sin los saltos bruscos del scroll tradicional.</li>
+                    <li><strong>Control:</strong> Tienes control total sobre la velocidad, desde movimientos muy lentos hasta desplazamiento rápido.</li>
+                    <li><strong>Versatilidad:</strong> Funciona igual de bien para texto, imágenes, código, y cualquier otro tipo de contenido.</li>
+                </ul>
+                
+                <h4>Casos de Uso:</h4>
+                <p>Este tipo de scroll es especialmente útil en varios escenarios:</p>
+                <ul>
+                    <li><strong>Edición de Código:</strong> Navegar por archivos largos con precisión para encontrar líneas específicas.</li>
+                    <li><strong>Diseño Gráfico:</strong> Ajustar elementos con precisión pixel a pixel.</li>
+                    <li><strong>Lectura de Documentos:</strong> Leer documentos largos con control total sobre la velocidad de desplazamiento.</li>
+                    <li><strong>Navegación Web:</strong> Explorar páginas web largas con suavidad y precisión.</li>
+                </ul>
+                
+                <p>Continúa haciendo scroll para ver más contenido. Este texto se repite varias veces para que tengas suficiente material y puedas evaluar el comportamiento del scroll durante un período prolongado. Puedes hacer scroll hacia arriba y hacia abajo para probar ambas direcciones.</p>
+            `;
+            
+            // Repetir el contenido varias veces para crear un texto muy largo
+            let fullContent = '';
+            for (let i = 0; i < 15; i++) {
+                fullContent += baseContent;
+                fullContent += `<hr style="border: 1px solid #3d4563; margin: 30px 0;">`;
+                fullContent += `<p style="text-align: center; color: #8b9aff; font-weight: bold;">--- Sección ${i + 1} de 15 ---</p>`;
+            }
+            
+            testArea.innerHTML = fullContent;
+            
+            // Posicionar el scroll en el medio para que se pueda hacer scroll en ambas direcciones
+            setTimeout(() => {
+                testArea.scrollTop = testArea.scrollHeight / 2 - testArea.clientHeight / 2;
+            }, 100);
+        }
+
+        // Inicializar contenido al cargar
+        generateTestContent();
+
+        // Verificar soporte de Web Serial API
+        if (!navigator.serial) {
+            showMessage(connectionMessage, 'error', 'Web Serial API no está disponible. Por favor, usa Chrome, Edge u otro navegador compatible.');
+            connectBtn.disabled = true;
+        }
+
+        // Conectar dispositivo
+        connectBtn.addEventListener('click', async () => {
+            try {
+                port = await navigator.serial.requestPort();
+                await port.open({ baudRate: 115200 });
+                
+                isConnected = true;
+                updateConnectionUI(true);
+                showMessage(connectionMessage, 'success', 'Dispositivo conectado exitosamente.');
+                
+                // Iniciar lectura de respuestas
+                readSerial();
+                
+                // Cargar configuración actual
+                await loadConfig();
+            } catch (error) {
+                if (error.name !== 'NotFoundError') {
+                    showMessage(connectionMessage, 'error', 'Error al conectar: ' + error.message);
+                }
+            }
+        });
+
+        // Desconectar dispositivo
+        disconnectBtn.addEventListener('click', async () => {
+            try {
+                if (reader) {
+                    await reader.cancel();
+                }
+                if (port) {
+                    await port.close();
+                }
+                isConnected = false;
+                updateConnectionUI(false);
+                showMessage(connectionMessage, 'info', 'Dispositivo desconectado.');
+            } catch (error) {
+                showMessage(connectionMessage, 'error', 'Error al desconectar: ' + error.message);
+            }
+        });
+
+        // Leer respuestas del dispositivo
+        async function readSerial() {
+            const decoder = new TextDecoder();
+            let buffer = '';
+            
+            try {
+                reader = port.readable.getReader();
+                
+                while (true) {
+                    const { value, done } = await reader.read();
+                    if (done) break;
+                    
+                    buffer += decoder.decode(value, { stream: true });
+                    const lines = buffer.split('\n');
+                    buffer = lines.pop() || '';
+                    
+                    for (const line of lines) {
+                        if (line.trim()) {
+                            handleSerialResponse(line.trim());
+                        }
+                    }
+                }
+            } catch (error) {
+                if (error.name !== 'AbortError') {
+                    console.error('Error leyendo serial:', error);
+                }
+            } finally {
+                reader.releaseLock();
+            }
+        }
+
+        // Manejar respuestas del dispositivo
+        function handleSerialResponse(response) {
+            console.log('Respuesta:', response);
+            
+            if (response.startsWith('OK')) {
+                if (response.includes('TIEMPO_PARA_ACELERAR=')) {
+                    parseConfigResponse(response);
+                } else if (response === 'OK SAVED') {
+                    showMessage(configMessage, 'success', 'Configuración guardada en EEPROM exitosamente.');
+                } else if (response === 'OK RESET') {
+                    showMessage(configMessage, 'success', 'Valores restaurados a los valores por defecto.');
+                    loadConfig();
+                } else if (response.startsWith('OK ')) {
+                    // Respuesta de SET exitoso
+                    const match = response.match(/OK (\w+)=(-?\d+)/);
+                    if (match) {
+                        showMessage(configMessage, 'success', `${match[1]} actualizado a ${match[2]}.`);
+                    }
+                }
+            } else if (response.startsWith('ERROR')) {
+                showMessage(configMessage, 'error', response);
+            }
+        }
+
+        // Parsear respuesta de GET ALL
+        function parseConfigResponse(response) {
+            const tiempoMatch = response.match(/TIEMPO_PARA_ACELERAR=(\d+)/);
+            const minMatch = response.match(/SCROLL_MIN=(-?\d+)/);
+            const maxMatch = response.match(/SCROLL_MAX=(-?\d+)/);
+            const pasoMatch = response.match(/PASO_ACELERACION=(\d+)/);
+            const dirMatch = response.match(/DIRECCION_SCROLL=(-?\d+)/);
+            
+            if (tiempoMatch) document.getElementById('tiempoAcelerar').value = tiempoMatch[1];
+            if (minMatch) document.getElementById('scrollMin').value = minMatch[1];
+            if (maxMatch) document.getElementById('scrollMax').value = maxMatch[1];
+            if (pasoMatch) document.getElementById('pasoAceleracion').value = pasoMatch[1];
+            if (dirMatch) document.getElementById('direccionScroll').value = dirMatch[1];
+        }
+
+        // Cargar configuración desde dispositivo
+        loadBtn.addEventListener('click', async () => {
+            await loadConfig();
+        });
+
+        async function loadConfig() {
+            if (!isConnected) return;
+            await sendCommand('GET ALL');
+            showMessage(configMessage, 'info', 'Cargando configuración...');
+        }
+
+        // Aplicar cambios
+        applyBtn.addEventListener('click', async () => {
+            if (!isConnected) return;
+            
+            const tiempo = document.getElementById('tiempoAcelerar').value;
+            const min = document.getElementById('scrollMin').value;
+            const max = document.getElementById('scrollMax').value;
+            const paso = document.getElementById('pasoAceleracion').value;
+            const dir = document.getElementById('direccionScroll').value;
+            
+            await sendCommand(`SET TIEMPO_PARA_ACELERAR ${tiempo}`);
+            await delay(50);
+            await sendCommand(`SET SCROLL_MIN ${min}`);
+            await delay(50);
+            await sendCommand(`SET SCROLL_MAX ${max}`);
+            await delay(50);
+            await sendCommand(`SET PASO_ACELERACION ${paso}`);
+            await delay(50);
+            await sendCommand(`SET DIRECCION_SCROLL ${dir}`);
+            
+            showMessage(configMessage, 'success', 'Cambios aplicados. Usa "Guardar en EEPROM" para hacerlos persistentes.');
+        });
+
+        // Guardar en EEPROM
+        saveBtn.addEventListener('click', async () => {
+            if (!isConnected) return;
+            await sendCommand('SAVE');
+        });
+
+        // Resetear valores
+        resetBtn.addEventListener('click', async () => {
+            if (!isConnected) return;
+            if (confirm('¿Estás seguro de que quieres restaurar los valores por defecto?')) {
+                await sendCommand('RESET');
+            }
+        });
+
+        // Enviar comando al dispositivo
+        async function sendCommand(command) {
+            if (!port || !isConnected) return;
+            
+            const encoder = new TextEncoder();
+            const writer = port.writable.getWriter();
+            await writer.write(encoder.encode(command + '\n'));
+            writer.releaseLock();
+        }
+
+        // Utilidades
+        function delay(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        function updateConnectionUI(connected) {
+            if (connected) {
+                statusIndicator.classList.add('connected');
+                connectBtn.disabled = true;
+                disconnectBtn.disabled = false;
+                loadBtn.disabled = false;
+                applyBtn.disabled = false;
+                saveBtn.disabled = false;
+                resetBtn.disabled = false;
+            } else {
+                statusIndicator.classList.remove('connected');
+                connectBtn.disabled = false;
+                disconnectBtn.disabled = true;
+                loadBtn.disabled = true;
+                applyBtn.disabled = true;
+                saveBtn.disabled = true;
+                resetBtn.disabled = true;
+            }
+        }
+
+        function showMessage(element, type, message) {
+            element.textContent = message;
+            element.className = `message ${type} show`;
+            setTimeout(() => {
+                element.classList.remove('show');
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
+
